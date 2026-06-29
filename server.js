@@ -56,39 +56,40 @@ Requirements:
 Return only the email body including subject line.
 `;
 
-  try {
-    const response = await fetch(GROQ_API_URL, {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-        Authorization: `Bearer ${GROQ_API_KEY}`,
-      },
-      body: JSON.stringify({
-      model: "llama3-8b-8192"
-        messages: [
-          { role: "system", content: "You are a helpful, expert cold email copywriter." },
-          { role: "user", content: prompt },
-        ],
-        temperature: 0.8,
-      }),
-    });
+ try {
+  const response = await fetch(GROQ_API_URL, {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+      Authorization: `Bearer ${GROQ_API_KEY}`,
+    },
+    body: JSON.stringify({
+      model: "mixtral-8x7b-32768",
+      messages: [
+        { role: "system", content: "You are a helpful, expert cold email copywriter." },
+        { role: "user", content: prompt },
+      ],
+      temperature: 0.8
+    }),
+  });
 
-    if (!response.ok) {
-      const text = await response.text();
-      console.error("Groq error:", text);
-      return res.status(500).json({ error: "Email generation failed." });
-    }
-
-    const data = await response.json();
-    const email =
-      data.choices?.[0]?.message?.content?.trim() ||
-      "Sorry, I couldn't generate an email.";
-
-    res.json({ email });
-  } catch (err) {
-    console.error(err);
-    res.status(500).json({ error: "Server error while generating email." });
+  if (!response.ok) {
+    const text = await response.text();
+    console.error("Groq error:", text);
+    return res.status(500).json({ error: "Email generation failed." });
   }
+
+  const data = await response.json();
+  const email =
+    data.choices?.[0]?.message?.content?.trim() ||
+    "Sorry, I couldn't generate an email.";
+
+  res.json({ email });
+} catch (err) {
+  console.error(err);
+  res.status(500).json({ error: "Server error while generating email." });
+}
+
 });
 
 app.post("/api/feedback", (req, res) => {
