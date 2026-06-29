@@ -64,7 +64,7 @@ Return only the email body including subject line.
         Authorization: `Bearer ${GROQ_API_KEY}`,
       },
       body: JSON.stringify({
-      model: "mixtral-8x7b-32768",
+      openai/gpt-oss-20b
         messages: [
           { role: "system", content: "You are a helpful, expert cold email copywriter." },
           { role: "user", content: prompt },
