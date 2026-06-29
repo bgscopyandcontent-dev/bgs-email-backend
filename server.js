@@ -64,7 +64,7 @@ Return only the email body including subject line.
         Authorization: `Bearer ${GROQ_API_KEY}`,
       },
       body: JSON.stringify({
-        model: "llama3-8b-8192",
+      model: "llama3-8b-8192",
         messages: [
           { role: "system", content: "You are a helpful, expert cold email copywriter." },
           { role: "user", content: prompt },
